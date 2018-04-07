@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chirp</title>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="./js/app.js"></script>
+</head>
+
+<body ng-app="chirpApp">
+  <div id="main" class="container" ng-controller="authCtrl as ctrl">
+    <form class="form-auth" ng-submit="ctrl.register()">
+      <h2>Register</h2>
+      <p class="text-warning">{{ ctrl.errorMessage }}</p>
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Username" required ng-model="ctrl.user.username">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" placeholder="Password" required ng-model="ctrl.user.password">
+      </div>
+      <input class="btn btn-primary" type="submit" value="Register">
+    </form>
+  </div>
+</body>
+
+</html>

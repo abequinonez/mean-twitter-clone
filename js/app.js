@@ -19,3 +19,19 @@ app.controller('mainCtrl', function() {
     self.form.$setUntouched();
   };
 });
+
+app.controller('authCtrl', function() {
+  const self = this;
+
+  // Register a user
+  self.register = function() {
+    // Placeholder until backend is set up
+    self.errorMessage = `Registration request for ${self.user.username}`;
+  };
+
+  // Log in a user
+  self.login = function() {
+    // Placeholder until backend is set up
+    self.errorMessage = `Login request for ${self.user.username}`;
+  };
+});
