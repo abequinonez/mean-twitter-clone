@@ -1,4 +1,27 @@
-const app = angular.module('chirpApp', []);
+const app = angular.module('chirpApp', ['ui.router']);
+
+// Configure routing using UI-Router
+app.config(function($stateProvider, $urlRouterProvider) {
+  // In case of an invalid route, navigate to the root route
+  $urlRouterProvider.otherwise('/');
+
+  $stateProvider
+    .state('main', {
+      url: '/',
+      templateUrl: 'main.html',
+      controller: 'mainCtrl as ctrl'
+    })
+    .state('register', {
+      url: '/register',
+      templateUrl: 'register.html',
+      controller: 'authCtrl as ctrl'
+    })
+    .state('login', {
+      url: '/login',
+      templateUrl: 'login.html',
+      controller: 'authCtrl as ctrl'
+    });
+});
 
 app.controller('mainCtrl', function() {
   const self = this;

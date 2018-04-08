@@ -1,44 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chirp</title>
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-    crossorigin="anonymous">
-  <link rel="stylesheet" href="./css/style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-  <script src="./js/app.js"></script>
-</head>
-
-<body ng-app="chirpApp">
-  <div id="main" class="container" ng-controller="mainCtrl as ctrl">
-    <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <form name="ctrl.form" ng-submit="ctrl.addPost()">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Your name" required ng-model="ctrl.newPost.creator">
-          </div>
-          <div class="form-group">
-            <textarea class="form-control" maxlength="200" rows="3" placeholder="Say something" required ng-model="ctrl.newPost.text"></textarea>
-          </div>
-          <input class="btn submit-btn float-right" type="submit" value="Chirp!">
-        </form>
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+    <form name="ctrl.form" ng-submit="ctrl.addPost()">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Your name" required ng-model="ctrl.newPost.creator">
       </div>
-    </div>
-    <div class="row">
-      <div id="post-stream" class="col-md-8 offset-md-2">
-        <h4>Chirp Feed</h4>
-        <div class="post" ng-repeat="post in ctrl.posts | orderBy:'-createdAt'" ng-class-odd="'odd'" ng-class-even="'even'">
-          <p>{{ post.text }}</p>
-          <small>Posted by @{{ post.creator }}</small>
-          <small class="float-right">{{ post.createdAt | date:"h:mma 'on' MMM d, y" }}</small>
-        </div>
+      <div class="form-group">
+        <textarea class="form-control" maxlength="200" rows="3" placeholder="Say something" required ng-model="ctrl.newPost.text"></textarea>
       </div>
+      <input class="btn submit-btn float-right" type="submit" value="Chirp!">
+    </form>
+  </div>
+</div>
+<div class="row">
+  <div id="post-stream" class="col-md-8 offset-md-2">
+    <h4>Chirp Feed</h4>
+    <div class="post" ng-repeat="post in ctrl.posts | orderBy:'-createdAt'" ng-class-odd="'odd'" ng-class-even="'even'">
+      <p>{{ post.text }}</p>
+      <small>Posted by @{{ post.creator }}</small>
+      <small class="float-right">{{ post.createdAt | date:"h:mma 'on' MMM d, y" }}</small>
     </div>
   </div>
-</body>
-
-</html>
+</div>
