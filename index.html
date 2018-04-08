@@ -16,6 +16,15 @@
 
 <body ng-app="chirpApp">
   <div id="main" class="container">
+    <nav class="navbar fixed-top navbar-expand navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" ui-sref="main">Chirp</a>
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" ui-sref="login">Log In</a>
+          <a class="nav-item nav-link" ui-sref="register">Register</a>
+        </div>
+      </div>
+    </nav>
     <ui-view></ui-view>
   </div>
 </body>
