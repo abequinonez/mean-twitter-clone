@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 // Import the routes
+const index = require('./routes/index');
 const api = require('./routes/api');
 // const authenticate = require('./routes/authenticate');
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Add the routes to the application
+app.use('/', index);
 app.use('/api', api);
 // app.use('/auth', authenticate);
 
