@@ -5,11 +5,12 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 // Import the routes
 const index = require('./routes/index');
 const api = require('./routes/api');
-// const authenticate = require('./routes/authenticate');
+const authenticate = require('./routes/authenticate')(passport);
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(flash());
 
 // Passport configuration
 app.use(
@@ -38,7 +40,7 @@ require('./passport-init')(passport);
 // Add the routes to the application
 app.use('/', index);
 app.use('/api', api);
-// app.use('/auth', authenticate);
+app.use('/auth', authenticate);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

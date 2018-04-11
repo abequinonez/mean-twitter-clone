@@ -23,7 +23,11 @@ module.exports = function(passport) {
       (req, username, password, done) => {
         // First check if the user already exists
         if (users[username]) {
-          return done('Username already taken', false);
+          return done(
+            null,
+            false,
+            req.flash('error', 'Username already taken')
+          );
         }
 
         // Save user to the DB
@@ -44,7 +48,7 @@ module.exports = function(passport) {
       (req, username, password, done) => {
         // Check if user exists and if password is correct
         if (!users[username] || !isValidPassword(users[username], password)) {
-          return done('Invalid credentials', false);
+          return done(null, false, req.flash('error', 'Invalid credentials'));
         }
 
         return done(null, users[username]);
