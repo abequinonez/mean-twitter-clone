@@ -3,6 +3,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const passport = require('passport');
+const session = require('express-session');
 
 // Import the routes
 const index = require('./routes/index');
@@ -20,6 +22,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Passport configuration
+app.use(
+  session({
+    secret: 'super secret'
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Initialize Passport
+require('./passport-init')(passport);
 
 // Add the routes to the application
 app.use('/', index);
