@@ -18,21 +18,23 @@ module.exports = function(passport) {
 
   passport.use(
     'register',
-    { passReqToCallback: true },
-    (req, username, password, done) => {
-      // First check if the user already exists
-      if (users[username]) {
-        return done('Username already taken', false);
+    new LocalStrategy(
+      { passReqToCallback: true },
+      (req, username, password, done) => {
+        // First check if the user already exists
+        if (users[username]) {
+          return done('Username already taken', false);
+        }
+
+        // Save user to the DB
+        users[username] = {
+          username,
+          password: hashPassword(password)
+        };
+
+        return done(null, users[username]);
       }
-
-      // Save user to the DB
-      users[username] = {
-        username,
-        password: hashPassword(password)
-      };
-
-      return done(null, users[username]);
-    }
+    )
   );
 
   passport.use(
