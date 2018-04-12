@@ -1,6 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
+// Router-level middleware for authenticating non-GET routes
+router.use((req, res, next) => {
+  // Only proceed if a GET route is requested or if the user is authenticated
+  if (req.method === 'GET' || req.isAuthenticated()) {
+    return next();
+  }
+
+  // Otherwise, redirect the user to the AngularJS app login page
+  return res.redirect('/#login');
+});
+
 router
   .route('/posts')
 
