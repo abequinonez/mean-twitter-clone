@@ -7,6 +7,9 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
 
+// Import the configured database reference
+const { mongoose } = require('./db/mongoose');
+
 // Import the routes
 const index = require('./routes/index');
 const api = require('./routes/api');
