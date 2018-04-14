@@ -1,5 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const { ObjectID } = require('mongodb');
+
+// Import the Post model
+const { Post } = require('./../models/post');
 
 // Router-level middleware for authenticating non-GET routes
 router.use((req, res, next) => {
@@ -17,32 +21,87 @@ router
 
   // Get all posts
   .get((req, res) => {
-    // Placeholder until database is set up
-    res.send({ message: 'TODO: Get all posts' });
+    Post.find()
+      .then(posts => res.send(posts))
+      .catch(err => res.status(500).send());
   })
 
   // Add a new post
   .post((req, res) => {
-    // Placeholder until database is set up
-    res.send({ message: 'TODO: Add a new post' });
+    // First create an instance of the Post model
+    const post = new Post({ text: req.body.text, _creator: req.user._id });
+
+    // Now save the instance (document) to the database
+    post
+      .save()
+      .then(post => res.send(post))
+      .catch(err => res.status(500).send());
   });
 
 router
   .route('/posts/:id')
 
-  // Get a post
+  // Get a post (if it exists)
   .get((req, res) => {
-    res.send({ message: `TODO: Get post with ID of ${req.params.id}` });
+    // Store the ID in a constant
+    const id = req.params.id;
+
+    // Check if the ID passed in is valid
+    if (!ObjectID.isValid(id)) {
+      return res.status(404).send();
+    }
+
+    Post.findById(id)
+      .then(post => {
+        if (!post) {
+          return res.status(404).send();
+        }
+
+        return res.send(post);
+      })
+      .catch(err => res.status(500).send());
   })
 
   // Update an existing post
   .put((req, res) => {
-    res.send({ message: `TODO: Update post with ID of ${req.params.id}` });
+    const id = req.params.id;
+
+    if (!ObjectID.isValid(id)) {
+      return res.status(404).send();
+    }
+
+    Post.findOneAndUpdate(
+      { _id: id, _creator: req.user._id },
+      { $set: { text: req.body.text } },
+      { new: true }
+    )
+      .then(post => {
+        if (!post) {
+          return res.status(404).send();
+        }
+
+        return res.send(post);
+      })
+      .catch(err => res.status(500).send());
   })
 
   // Delete an existing post
   .delete((req, res) => {
-    res.send({ message: `TODO: Delete post with ID of ${req.params.id}` });
+    const id = req.params.id;
+
+    if (!ObjectID.isValid(id)) {
+      return res.status(404).send();
+    }
+
+    Post.findOneAndRemove({ _id: id, _creator: req.user._id })
+      .then(post => {
+        if (!post) {
+          return res.status(404).send();
+        }
+
+        return res.send(post);
+      })
+      .catch(err => res.status(500).send());
   });
 
 module.exports = router;
