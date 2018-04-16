@@ -1,6 +1,8 @@
 const app = angular
   .module('chirpApp', ['ui.router'])
   .run(function($rootScope, $http) {
+    getUserStatus();
+
     $rootScope.logout = function() {
       $http
         .get('/auth/logout')
@@ -12,6 +14,20 @@ const app = angular
           console.log('Error making request');
         });
     };
+
+    function getUserStatus() {
+      $http
+        .get('/auth/status')
+        .then(function(res) {
+          if (res.data.authenticated) {
+            $rootScope.authenticated = true;
+            $rootScope.currentUser = res.data.user.username;
+          }
+        })
+        .catch(function() {
+          console.log('Error contacting server');
+        });
+    }
   });
 
 // Configure routing using UI-Router

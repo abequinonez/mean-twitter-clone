@@ -42,5 +42,11 @@ module.exports = function(passport) {
     res.redirect('/');
   });
 
+  // Get user authentication status
+  router.get('/status', (req, res) => {
+    const authenticated = req.isAuthenticated();
+    res.send({ authenticated, user: req.user });
+  });
+
   return router;
 };
