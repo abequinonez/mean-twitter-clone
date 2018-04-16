@@ -20,10 +20,10 @@
       <div class="container">
         <a class="navbar-brand" ui-sref="main">Chirp</a>
         <div class="navbar-nav">
-          <a class="nav-item nav-link mr-1" ui-sref="login" ng-hide="authenticated">Log In</a>
-          <a class="nav-item nav-link" ui-sref="register" ng-hide="authenticated">Register</a>
-          <span class="navbar-text mr-3 text-light" ng-show="authenticated">Logged in as {{ currentUser }}</span>
-          <a class="nav-item nav-link" ui-sref="main" ng-click="logout()" ng-show="authenticated">Log Out</a>
+          <a class="nav-item nav-link mr-1" ui-sref="login" ng-hide="currentUser.authenticated">Log In</a>
+          <a class="nav-item nav-link" ui-sref="register" ng-hide="currentUser.authenticated">Register</a>
+          <span class="navbar-text mr-3 text-light" ng-show="currentUser.authenticated">Logged in as {{ currentUser.username }}</span>
+          <a class="nav-item nav-link" ui-sref="main" ng-click="logout()" ng-show="currentUser.authenticated">Log Out</a>
         </div>
       </div>
     </nav>

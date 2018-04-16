@@ -1,31 +1,53 @@
 const app = angular
   .module('chirpApp', ['ui.router'])
   .run(function($rootScope, $http) {
+    $rootScope.currentUser = {};
     getUserStatus();
 
+    /*
+    Log out a user. Make a logout request to the backend and reset the user's
+    authentication status on the frontend.
+    */
     $rootScope.logout = function() {
       $http
         .get('/auth/logout')
         .then(function() {
-          $rootScope.authenticated = false;
-          $rootScope.currentUser = '';
+          resetAuthStatus();
         })
         .catch(function() {
           console.log('Error making request');
         });
     };
 
+    // Set user's status to authenticated
+    $rootScope.setAuthStatus = function(username) {
+      $rootScope.currentUser.authenticated = true;
+      $rootScope.currentUser.username = username;
+    };
+
+    // Reset user's authentication status
+    function resetAuthStatus() {
+      $rootScope.currentUser.authenticated = false;
+      $rootScope.currentUser.username = '';
+    }
+
+    /*
+    Check to see if a user is logged in on the backend. If so, set the user's
+    status to authenticated. Otherwise, reset the user's status.
+    */
     function getUserStatus() {
       $http
         .get('/auth/status')
         .then(function(res) {
           if (res.data.authenticated) {
-            $rootScope.authenticated = true;
-            $rootScope.currentUser = res.data.user.username;
+            return $rootScope.setAuthStatus(res.data.user.username);
           }
+
+          return resetAuthStatus();
         })
         .catch(function() {
           console.log('Error contacting server');
+          return resetAuthStatus();
         });
     }
   });
@@ -92,8 +114,7 @@ app.controller('authCtrl', function($rootScope, $http, $location) {
       .post('/auth/' + type, self.user)
       .then(function(res) {
         if (res.data.state === 'success') {
-          $rootScope.authenticated = true;
-          $rootScope.currentUser = res.data.user.username;
+          $rootScope.setAuthStatus(res.data.user.username);
           $location.path('/');
         } else {
           self.errorMessage = res.data.message;
