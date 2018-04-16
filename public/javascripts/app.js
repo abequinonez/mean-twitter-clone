@@ -1,4 +1,18 @@
-const app = angular.module('chirpApp', ['ui.router']);
+const app = angular
+  .module('chirpApp', ['ui.router'])
+  .run(function($rootScope, $http) {
+    $rootScope.logout = function() {
+      $http
+        .get('/auth/logout')
+        .then(function() {
+          $rootScope.authenticated = false;
+          $rootScope.currentUser = '';
+        })
+        .catch(function() {
+          console.log('Error making request');
+        });
+    };
+  });
 
 // Configure routing using UI-Router
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -43,18 +57,34 @@ app.controller('mainCtrl', function() {
   };
 });
 
-app.controller('authCtrl', function() {
+app.controller('authCtrl', function($rootScope, $http, $location) {
   const self = this;
 
   // Register a user
   self.register = function() {
-    // Placeholder until backend is set up
-    self.errorMessage = `Registration request for ${self.user.username}`;
+    authenticate('register');
   };
 
   // Log in a user
   self.login = function() {
-    // Placeholder until backend is set up
-    self.errorMessage = `Login request for ${self.user.username}`;
+    authenticate('login');
   };
+
+  // Authenticate a user after registering or logging in
+  function authenticate(type) {
+    $http
+      .post('/auth/' + type, self.user)
+      .then(function(res) {
+        if (res.data.state === 'success') {
+          $rootScope.authenticated = true;
+          $rootScope.currentUser = res.data.user.username;
+          $location.path('/');
+        } else {
+          self.errorMessage = res.data.message;
+        }
+      })
+      .catch(function() {
+        self.errorMessage = 'Error making request';
+      });
+  }
 });
