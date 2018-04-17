@@ -75,9 +75,28 @@ app.config(function($stateProvider, $urlRouterProvider) {
     });
 });
 
-app.controller('mainCtrl', function() {
+// Service for getting all posts from the server
+app.service('postSvc', function($http) {
+  this.getAll = function() {
+    return $http.get('/api/posts');
+  };
+});
+
+app.controller('mainCtrl', function(postSvc) {
   const self = this;
-  self.posts = [];
+
+  /*
+  Make a request to get all posts from the server and assign the response to the
+  posts array.
+  */
+  postSvc
+    .getAll()
+    .then(function(res) {
+      self.posts = res.data;
+    })
+    .catch(function() {
+      console.log('Error retrieving posts');
+    });
 
   // Add a new post to the array of posts
   self.addPost = function() {
