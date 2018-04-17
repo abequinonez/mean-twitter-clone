@@ -28,8 +28,14 @@ router
 
   // Add a new post
   .post((req, res) => {
-    // First create an instance of the Post model
-    const post = new Post({ text: req.body.text, _creator: req.user._id });
+    // First prepare the _creator object
+    const _creator = {
+      id: req.user._id,
+      username: req.user.username
+    };
+
+    // Next create an instance of the Post model
+    const post = new Post({ text: req.body.text, _creator });
 
     // Now save the instance (document) to the database
     post
@@ -70,8 +76,14 @@ router
       return res.status(404).send();
     }
 
+    // Prepare the _creator object
+    const _creator = {
+      id: req.user._id,
+      username: req.user.username
+    };
+
     Post.findOneAndUpdate(
-      { _id: id, _creator: req.user._id },
+      { _id: id, _creator },
       { $set: { text: req.body.text } },
       { new: true }
     )
@@ -93,7 +105,13 @@ router
       return res.status(404).send();
     }
 
-    Post.findOneAndRemove({ _id: id, _creator: req.user._id })
+    // Prepare the _creator object
+    const _creator = {
+      id: req.user._id,
+      username: req.user.username
+    };
+
+    Post.findOneAndRemove({ _id: id, _creator })
       .then(post => {
         if (!post) {
           return res.status(404).send();
