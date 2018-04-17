@@ -16,7 +16,7 @@
     <h4>Chirp Feed</h4>
     <div class="post" ng-repeat="post in ctrl.posts | orderBy:'-createdAt'" ng-class-odd="'odd'" ng-class-even="'even'">
       <p>{{ post.text }}</p>
-      <small>Posted by @{{ post.creator }}</small>
+      <small>Posted by @{{ post._creator.username }}</small>
       <small class="float-right">{{ post.createdAt | date:"h:mma 'on' MMM d, y" }}</small>
     </div>
   </div>
