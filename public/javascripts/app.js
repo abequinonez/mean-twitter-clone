@@ -1,5 +1,5 @@
 const app = angular
-  .module('chirpApp', ['ui.router'])
+  .module('chirpApp', ['ui.router', 'ngResource'])
   .run(function($rootScope, $http) {
     $rootScope.currentUser = {};
     getUserStatus();
@@ -75,24 +75,23 @@ app.config(function($stateProvider, $urlRouterProvider) {
     });
 });
 
-// Service for getting all posts from the server
-app.service('postSvc', function($http) {
-  this.getAll = function() {
-    return $http.get('/api/posts');
-  };
+// Service for interacting with the posts API
+app.service('postSvc', function($resource) {
+  return $resource('/api/posts/:id');
 });
 
 app.controller('mainCtrl', function(postSvc) {
   const self = this;
+  self.posts = [];
 
   /*
   Make a request to get all posts from the server and assign the response to the
   posts array.
   */
   postSvc
-    .getAll()
-    .then(function(res) {
-      self.posts = res.data;
+    .query()
+    .$promise.then(function(res) {
+      self.posts = res;
     })
     .catch(function() {
       console.log('Error retrieving posts');
