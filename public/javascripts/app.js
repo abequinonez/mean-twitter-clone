@@ -84,33 +84,45 @@ app.controller('mainCtrl', function(postSvc) {
   const self = this;
   self.posts = [];
 
+  // Get all posts on page load
+  getPosts();
+
+  // Add a new post
+  self.addPost = function() {
+    postSvc
+      .save(self.newPost)
+      .$promise.then(function() {
+        /*
+        Reset the form. Use of $setPristine() and $setUntouched() made possible with
+        help from the following Stack Overflow post:
+        https://stackoverflow.com/a/18648486/9140123
+        */
+        self.newPost = {};
+        self.form.$setPristine();
+        self.form.$setUntouched();
+
+        // Get the updated posts
+        getPosts();
+      })
+      .catch(function() {
+        console.log('Error saving post');
+      });
+  };
+
   /*
   Make a request to get all posts from the server and assign the response to the
   posts array.
   */
-  postSvc
-    .query()
-    .$promise.then(function(res) {
-      self.posts = res;
-    })
-    .catch(function() {
-      console.log('Error retrieving posts');
-    });
-
-  // Add a new post to the array of posts
-  self.addPost = function() {
-    self.newPost.createdAt = Date.now();
-    self.posts.push(self.newPost);
-
-    /*
-    Reset the form. Use of $setPristine() and $setUntouched() made possible with
-    help from the following Stack Overflow post:
-    https://stackoverflow.com/a/18648486/9140123
-    */
-    self.newPost = {};
-    self.form.$setPristine();
-    self.form.$setUntouched();
-  };
+  function getPosts() {
+    postSvc
+      .query()
+      .$promise.then(function(res) {
+        self.posts = res;
+      })
+      .catch(function() {
+        console.log('Error retrieving posts');
+      });
+  }
 });
 
 app.controller('authCtrl', function($rootScope, $http, $location) {
