@@ -17,7 +17,7 @@
       <small>@{{ post._creator.username }}</small>
       <small> | </small>
       <small>{{ post.createdAt | date:"h:mma 'on' MMM d, y" }}</small>
-      <div class="float-right">
+      <div class="float-right" ng-show="ctrl.isPostCreator(post)">
         <button class="delete-btn">
           <i class="fas fa-times-circle"></i>
         </button>

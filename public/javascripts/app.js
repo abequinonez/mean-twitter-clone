@@ -80,7 +80,7 @@ app.service('postSvc', function($resource) {
   return $resource('/api/posts/:id');
 });
 
-app.controller('mainCtrl', function(postSvc) {
+app.controller('mainCtrl', function($rootScope, postSvc) {
   const self = this;
   self.posts = [];
 
@@ -107,6 +107,17 @@ app.controller('mainCtrl', function(postSvc) {
       .catch(function() {
         console.log('Error saving post');
       });
+  };
+
+  /*
+  Return a boolean that declares whether or not the post passed in was created
+  by the current user.
+  */
+  self.isPostCreator = function(post) {
+    const authenticated = $rootScope.currentUser.authenticated;
+    const username = $rootScope.currentUser.username;
+    const postCreator = post._creator.username;
+    return authenticated && username === postCreator;
   };
 
   /*
