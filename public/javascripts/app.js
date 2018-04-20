@@ -120,6 +120,11 @@ app.controller('mainCtrl', function($rootScope, postSvc) {
     return authenticated && username === postCreator;
   };
 
+  // Set the post to be deleted
+  self.setPostToDelete = function(post) {
+    self.postToDelete = post;
+  };
+
   /*
   Make a request to get all posts from the server and assign the response to the
   posts array.
