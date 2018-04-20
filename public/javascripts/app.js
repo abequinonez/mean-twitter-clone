@@ -75,7 +75,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
     });
 });
 
-// Service for interacting with the posts API
+/*
+Service for interacting with the posts API. The AngularJS docs and the following
+resource were helpful in using the $resource service:
+https://www.sitepoint.com/creating-crud-app-minutes-angulars-resource
+*/
 app.service('postSvc', function($resource) {
   return $resource('/api/posts/:id');
 });
@@ -123,6 +127,21 @@ app.controller('mainCtrl', function($rootScope, postSvc) {
   // Set the post to be deleted
   self.setPostToDelete = function(post) {
     self.postToDelete = post;
+  };
+
+  // Delete a post
+  self.deletePost = function() {
+    if (self.postToDelete) {
+      postSvc
+        .remove({ id: self.postToDelete._id })
+        .$promise.then(function() {
+          getPosts();
+        })
+        .catch(function() {
+          console.log('Error deleting post');
+        });
+    }
+    self.postToDelete = {};
   };
 
   /*
