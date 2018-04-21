@@ -53,7 +53,7 @@ const app = angular
   });
 
 // Configure routing using UI-Router
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   // In case of an invalid route, navigate to the root route
   $urlRouterProvider.otherwise('/');
 
@@ -73,6 +73,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: 'login.html',
       controller: 'authCtrl as ctrl'
     });
+
+  /*
+  Remove hash symbol from URL. The following Stack Overflow post was used as a
+  reference: https://stackoverflow.com/a/35787116
+  */
+  $locationProvider.html5Mode(true);
 });
 
 /*
