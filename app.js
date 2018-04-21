@@ -1,3 +1,5 @@
+require('./config/config');
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -31,7 +33,9 @@ app.use(flash());
 // Passport configuration
 app.use(
   session({
-    secret: 'super secret'
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
   })
 );
 app.use(passport.initialize());
